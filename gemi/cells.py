@@ -71,7 +71,7 @@ def make_plus3d(fac, x, dx, sizes):
     obj, *tool = dimTags
 
     dimTag, _ = fac.fuse([obj], tool)
-    fac.synchronize()
+    # fac.synchronize()
 
     return dimTag[0][1]
 

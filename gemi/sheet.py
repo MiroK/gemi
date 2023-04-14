@@ -1,8 +1,9 @@
 from collections import deque, defaultdict
 import numpy as np
 import itertools
+import tqdm, time
 
-    
+
 def sheet_geometry(model, make_cell, ncells, pads, shifts=None):
     '''
     Use GMSH.OpenCascade functionality to build a sheet of (connected) 
@@ -46,7 +47,7 @@ def sheet_geometry(model, make_cell, ncells, pads, shifts=None):
     next(shifts)  # As we do not want to add cell0 again
 
     cells = [cell0]
-    for shift in shifts:
+    for shift in tqdm.tqdm(shifts, total=np.prod(ncells)-1, desc='Adding cells'):
         x = origin + shift
         cells.append(make_cell(fac, x))
 
@@ -60,9 +61,12 @@ def sheet_geometry(model, make_cell, ncells, pads, shifts=None):
         extrac = fac.addBox(xmin[0], xmin[1], xmin[2], dx[0], dx[1], dx[2])
     
     # We compute the intersections of cells with extrac
+    print('Fragmenting geometry')
+    t0 = time.time()
     _, (extrac, *intrac) = fac.fragment([(gdim, extrac)], [(gdim, cell) for cell in cells],
                                         removeObject=True, removeTool=True)
     fac.synchronize()
+    print(f'\tDone fragmenting in {time.time()-t0} s')
     # fac.removeAllDuplicates()
     
     # Now each item in intrac should be one EMI cell
@@ -73,8 +77,10 @@ def sheet_geometry(model, make_cell, ncells, pads, shifts=None):
     emi_cells = set(sum(intrac, []))
     extrac = list(set(extrac) - emi_cells)
 
+    print('Computing cell connectivity')
+    t0 = time.time()
     model, connectivity = compute_connectivity(model, fac, xmin, xmax, emi_cells, extrac)
-
+    print(f'\tDone computing connectivity in {time.time()-t0} s')
     return model, connectivity
 
 

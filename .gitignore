@@ -7,5 +7,7 @@
 *.pvd
 *.vtu
 
+*.geo_unrolled
+
 *.egg-info/
 __pycache__/
