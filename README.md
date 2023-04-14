@@ -88,8 +88,8 @@ can be saved in `.msh` format and used in some FEM simulators.
 mesh in memory for FEniCS. This then requires FEniCS stack version `2019.1.0` and higher
 
 ## Installation
-I suppose you want to further develop this in which case I recomment lanching the following
-from the source directory.
+I suppose you want to further develop this in which case I recommend launching the following
+from the source directory
 ```bash
 pip install -e .
 ```
@@ -102,6 +102,7 @@ For further examples see `/demo` or `/test` folders.
 
 
 ## TODO
-- [ ] More cells (somethign with cylinder)
+- [ ] More cells (something with cylinder)
 - [ ] Some example where the boundary cells are different (e.g. without connecting points)
-      from the interior cells.
+      from the interior cells
+- [ ] Combining different cells in tiling (or also leave a hole to simulate some defect). In this case it would fun to build "checker" for cell compatibility before we actually commit to meshing
