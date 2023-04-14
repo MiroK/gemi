@@ -24,7 +24,7 @@ model, connectivity = sheet_geometry(model, make_cell=make_cell, ncells=ncells, 
 model.occ.synchronize()
 
 # We can checkout the geometry in gmsh
-if False:
+if True:
     gmsh.fltk.initialize()
     gmsh.fltk.run()
 

@@ -17,8 +17,13 @@ ncells = (2, 4)
 pads = (0.1, 0.5)
 
 # We get back a lookup table for checing how interfaces are connected to
-# cells and extracellular space
-model, connectivity = sheet_geometry(model, make_cell=make_cell, ncells=ncells, pads=pads)
+# cells and extracellular space.
+# NOTE: here we set shifts to None so that the cells will be glued to gether.
+# Shifts which is larger then the bounding box of the cell allows as to create
+# gaps between cells in the sheet
+shifts = (1, 1)
+model, connectivity = sheet_geometry(model, make_cell=make_cell, ncells=ncells, pads=pads,
+                                     shifts=None)
 
 for facet, cells in connectivity.items():
     print(f'Facet {facet} is connected to cells {cells}')
@@ -26,7 +31,7 @@ for facet, cells in connectivity.items():
 model.occ.synchronize()
 
 # We can checkout the geometry in gmsh
-if False:
+if True:
     gmsh.fltk.initialize()
     gmsh.fltk.run()
 
