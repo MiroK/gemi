@@ -1,0 +1,11 @@
+*.pyc
+*~
+
+*.h5
+*.json
+*.msh
+*.pvd
+*.vtu
+
+*.egg-info/
+__pycache__/
