@@ -84,9 +84,15 @@ With the results visualized in Gmsh and paraview
 - [`gmsh`](https://gitlab.onelab.info/gmsh/gmsh/-/blob/master/api/gmsh.py)(its Python API)
 is used to define the model/geometry. Once meshed, (e.g. through GUI) the mesh
 can be saved in `.msh` format and used in some FEM simulators.
-* [`gmshnics`](https://github.com/MiroK/gmshnics) is used to alternatively load the
+- [`gmshnics`](https://github.com/MiroK/gmshnics) is used to alternatively load the
 mesh in memory for FEniCS. This then requires FEniCS stack version `2019.1.0` and higher
 
+## Installation
+I suppose you want to further develop this in which case I recomment lanching the following
+from the source directory.
+```bash
+pip install -e .
+```
 ## Further usage
 For further examples see `/demo` or `/test` folders.
   <p align="center">	    
