@@ -13,7 +13,7 @@ gmsh.initialize()
 model = gmsh.model
 
 # In our geoemtry we want to create sheet with 2 x 4 cells ...
-ncells = (5, 4, 2)
+ncells = (5, 4, 1)
 # ... that will have the following padding
 pads = (0.2, 0.5, 0.3)
 

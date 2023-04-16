@@ -8,7 +8,7 @@ import gmsh
 # Specialize the cell by fixing its size
 make_cell = partial(make_plus2d, dx0=(0.2, 0.2), dx1=(0.3, 0.3))
 # Silent gmsh and set the mesh size
-gmsh.initialize(['', '-v', '0', '-clmax', '0.05'])
+gmsh.initialize(['', '-v', '0', '-clmax', '0.01'])
 model = gmsh.model
 
 # In our geoemtry we want to create sheet with 2 x 4 cells ...
@@ -24,6 +24,13 @@ pads = (0.1, 0.5)
 shifts = (1, 1)
 model, connectivity = sheet_geometry(model, make_cell=make_cell, ncells=ncells, pads=pads,
                                      shifts=None)
+
+# From connectivity we can ask about the nature of interfaces
+# Cell taged 1 is extracellular
+all_interfaces = [facet for facet in connectivity if len(connectivity[facet]) > 1]
+# Which of these are interfaces between EMI cells - here one would have gap
+# junctions
+gj_interfaces = [facet for facet in all_interfaces if 1 not in connectivity[facet]]
 
 for facet, cells in connectivity.items():
     print(f'Facet {facet} is connected to cells {cells}')
@@ -49,6 +56,14 @@ gmsh.finalize()
 
 import dolfin as df
 import json
+
+df.set_log_level(100)
+
+facet_dim = mesh.topology().dim() - 1
+# How many "facet cells" are there on the interface
+membrane_cells = sum(sum(1 for f in df.SubsetIterator(entity_fs[facet_dim], color))
+                     for color in all_interfaces)
+print(f'Number of membrane facet {membrane_cells} / Total number of facets {mesh.num_entities(facet_dim)}')
 
 # Just show of dumping to HDF5 ...
 with df.HDF5File(mesh.mpi_comm(), 'demo2d.h5', 'w') as out:
