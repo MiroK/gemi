@@ -65,6 +65,10 @@ membrane_cells = sum(sum(1 for f in df.SubsetIterator(entity_fs[facet_dim], colo
                      for color in all_interfaces)
 print(f'Number of membrane facet {membrane_cells} / Total number of facets {mesh.num_entities(facet_dim)}')
 
+from gemi.utils import mark_interfaces
+
+simple_interface, etag, itag = mark_interfaces(entity_fs[facet_dim], connectivity)
+
 # Just show of dumping to HDF5 ...
 with df.HDF5File(mesh.mpi_comm(), 'demo2d.h5', 'w') as out:
     out.write(mesh, 'mesh/')
@@ -77,3 +81,4 @@ with open('demo2d.json', 'w') as out:
 # And Paraview for visual inspection
 df.File('demo2d_subdomains.pvd') << entity_fs[2]
 df.File('demo2d_interfaces.pvd') << entity_fs[1]
+df.File('demo2d_simple_interfaces.pvd') << simple_interface
